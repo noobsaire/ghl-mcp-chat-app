@@ -1,0 +1,193 @@
+# Enhanced LibreChat Configuration for GoHighLevel MCP Server
+# Optimized for OpenAI agents with intelligent multi-tool calling
+# Copy this to your LibreChat installation as librechat.yaml
+
+version: 1.1.5
+
+# Enhanced MCP Server Configuration
+mcpServers:
+  gohighlevel:
+    name: "GoHighLevel CRM (Enhanced)"
+    description: "Enhanced GoHighLevel CRM with intelligent agent capabilities for multi-tool calling and natural language processing"
+    
+    # STDIO transport configuration (recommended for best performance)
+    command: "python"
+    args: ["/path/to/ghl-mcp-app/src/enhanced_main.py"]
+    
+    # Configure your GoHighLevel API credentials here
+    env:
+      GHL_API_KEY: "your-ghl-api-key-here"
+      GHL_LOCATION_ID: "your-ghl-location-id-here"
+      GHL_BASE_URL: "https://services.leadconnectorhq.com"
+    
+    tools:
+      enabled: true
+      # Recommended tools for OpenAI agents (prioritize intelligent tools)
+      whitelist:
+        # Primary intelligent tools
+        - "analyze_and_execute"          # Main intelligent tool calling
+        - "suggest_tools_for_input"      # Get tool suggestions
+        - "get_missing_parameters"       # Parameter validation
+        - "get_available_tools_summary"  # Browse tools
+        
+        # Core contact management
+        - "get_contacts"
+        - "create_contact"
+        - "get_contact"
+        - "update_contact"
+        
+        # Campaign management
+        - "get_campaigns"
+        - "create_campaign"
+        
+        # Or comment out whitelist to enable all tools
+        # (includes all 327 generated GoHighLevel API tools)
+
+# Enhanced interface configuration for OpenAI agents
+interface:
+  showMcpTools: true
+  mcpToolSettings:
+    # Optimize for intelligent tool calling
+    preferIntelligentTools: true
+    showToolCategories: true
+    groupSimilarTools: true
+
+# OpenAI model configurations optimized for tool calling
+models:
+  openai:
+    # GPT-4 models optimized for tool calling
+    gpt-4o:
+      title: "GPT-4o (Tool Calling Optimized)"
+      max_tokens: 4096
+      temperature: 0.1  # Lower temperature for more consistent tool calling
+      tools:
+        enabled: true
+        # Prioritize the intelligent analyze_and_execute tool
+        preferred: ["analyze_and_execute"]
+        # Enable parallel tool calling for multi-step operations
+        parallel: true
+    
+    gpt-4o-mini: 
+      title: "GPT-4o Mini (Fast Tool Calling)"
+      max_tokens: 4096
+      temperature: 0.1
+      tools:
+        enabled: true
+        preferred: ["analyze_and_execute"]
+        parallel: true
+    
+    gpt-4-turbo:
+      title: "GPT-4 Turbo (Advanced Tool Calling)"
+      max_tokens: 4096
+      temperature: 0.1
+      tools:
+        enabled: true
+        preferred: ["analyze_and_execute"]
+        parallel: true
+
+# Enhanced model specifications for intelligent CRM operations
+modelSpecs:
+  openai:
+    title: "OpenAI (GHL Enhanced)"
+    iconURL: "https://api.openai.com/v1/images/logo-openai.png"
+    models:
+      gpt-4o:
+        name: "GPT-4o"
+        context: 128000
+        max_output_tokens: 4096
+        description: "Most capable model with enhanced GoHighLevel CRM integration"
+        tools: true
+        vision: true
+      gpt-4o-mini:
+        name: "GPT-4o mini"
+        context: 128000
+        max_output_tokens: 16384
+        description: "Fast and efficient model for CRM operations"
+        tools: true
+        vision: true
+
+# Enhanced presets for common CRM operations
+presets:
+  - title: "GHL Contact Manager"
+    model: "gpt-4o"
+    chatGPTLabel: null
+    promptPrefix: |
+      You are an expert GoHighLevel CRM assistant with access to intelligent tools.
+      
+      Key capabilities:
+      - Use "analyze_and_execute" for complex requests that may need multiple tools
+      - Handle missing information by asking clarifying questions
+      - Provide detailed explanations of actions taken
+      - Suggest next steps and best practices
+      
+      Always prioritize the intelligent tools over individual API calls when possible.
+      
+      When working with contacts:
+      - Always ask for locationId if not provided
+      - Validate email formats and phone numbers
+      - Suggest relevant additional fields
+      - Provide insights on contact management best practices
+    temperature: 0.1
+    top_p: 1
+    presence_penalty: 0
+    frequency_penalty: 0
+
+  - title: "GHL Campaign Manager"
+    model: "gpt-4o"
+    chatGPTLabel: null
+    promptPrefix: |
+      You are a GoHighLevel marketing automation specialist with intelligent CRM tools.
+      
+      Focus on:
+      - Campaign creation and management
+      - Contact segmentation strategies
+      - Marketing automation workflows
+      - Performance analysis and optimization
+      
+      Use the intelligent analyze_and_execute tool to handle complex multi-step operations.
+      Always explain your reasoning and suggest improvements.
+    temperature: 0.1
+    top_p: 1
+    presence_penalty: 0
+    frequency_penalty: 0
+
+  - title: "GHL Multi-Tool Assistant"
+    model: "gpt-4o"
+    chatGPTLabel: null
+    promptPrefix: |
+      You are an advanced GoHighLevel assistant capable of executing multiple tools in sequence.
+      
+      Your approach:
+      1. Analyze the user's request to understand their intent
+      2. Use "analyze_and_execute" for intelligent tool orchestration
+      3. Handle missing parameters by asking specific questions
+      4. Execute multiple related tools when beneficial
+      5. Provide comprehensive summaries of actions taken
+      
+      Always explain what you're doing and why, and suggest next steps.
+    temperature: 0.1
+    top_p: 1
+    presence_penalty: 0
+    frequency_penalty: 0
+
+# Additional configuration for enhanced performance
+# Optimize timeouts for tool calling operations
+mcpSettings:
+  timeout: 60000  # 60 seconds for complex operations
+  retries: 3
+  parallelTools: true  # Enable parallel tool execution
+  intelligentFallback: true  # Fall back to simpler tools if complex ones fail
+
+# Error handling and user experience
+errorHandling:
+  showDetailedErrors: true
+  suggestAlternatives: true
+  logToolCalls: true
+
+# Usage tips (shown in interface)
+tips:
+  - "Start requests with natural language - the intelligent agent will figure out which tools to use"
+  - "For complex operations, use phrases like 'I want to create a contact and add them to a campaign'"
+  - "If you're missing information, the system will ask for specific details needed"
+  - "Use 'show me available tools' to browse all capabilities"
+  - "The system can handle multiple related operations in a single request"
